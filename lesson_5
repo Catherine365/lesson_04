@@ -1,0 +1,120 @@
+-- Практическое задание по теме «Операторы, фильтрация, сортировка и ограничение»
+
+-- 1
+
+create database practise;
+
+show databases;
+
+use practise;
+
+create table users (
+	id int(10),
+	name varchar(50),
+	created_at datetime DEFAULT current_timestamp(),
+	updated_at datetime DEFAULT current_timestamp()
+	);
+
+INSERT INTO users VALUES ('1','Jovany','2013-11-06 14:16:27','2014-02-22 03:23:40'),
+('2','Rupert','2012-04-20 06:59:56','2011-01-11 05:25:26'),
+('3','Dale','2011-04-27 12:39:25','2020-09-26 02:04:36'),
+('4','Melvina','2012-08-29 14:46:12','2015-08-28 09:13:43'),
+('5','Esmeralda','2019-02-27 06:36:57','2017-02-01 20:13:20');
+
+select * from users;
+
+update users set 
+	created_at = now(),
+	updated_at = now();
+
+-- 2
+
+alter table users add column date_cat datetime;
+alter table users add column date_uat datetime;
+
+update users set
+	date_cat = current_timestamp(),
+	date_uat = current_timestamp();
+
+-- 3
+
+create table storehouses_products (
+	id int(10),
+	name_products varchar(50),
+	value_products int(50)
+	);
+
+INSERT INTO storehouses_products VALUES ('1','apple','2'),
+	('12','pineapple','7'),
+	('2','cucumber','0'),
+	('3','tomato','3'),
+	('4','potato','14'),
+	('5','cheeze','0'),
+	('6','bread','4');
+
+select * from storehouses_products order by case when value_products = 0 then 16 else value_products end;
+
+-- 4
+
+alter table users add column month_birth varchar(15);
+
+select * from users;
+
+update users set month_birth = 'august' where name = 'Rupert';
+
+update users set month_birth = 'may' where name = 'Esmeralda';
+
+update users set month_birth = 'june' where name = 'Jovany';
+update users set month_birth = 'june' where name = 'Dale';
+update users set month_birth = 'june' where name = 'Melvina';
+
+select name, month_birth from users where month_birth = 'august' or month_birth = 'may';
+
+-- 5
+
+use practise;
+
+create table catalogs (
+	id int(10)
+	);
+
+insert into catalogs values 
+	('1'),
+	('2'),
+	('3'),
+	('4'),
+	('5'),
+	('6');
+
+select id from catalogs where id in(5, 1, 2) order by case when id = 2 then 5 else id = 1 end;
+
+
+--- Практическое задание теме «Агрегация данных»
+
+--- 1
+
+use practise;
+
+create table users_2 (
+	id int(6),
+	age_users INT(10)
+	);
+
+insert into users_2 values ('1', '3'),
+('2', '6'),
+('3', '9');
+
+select * from users_2;
+
+select AVG(age_users) as users_2Avg from users_2;
+
+
+---- 2	
+	
+--- Не разобралась с заданием)
+
+--- 3
+
+select exp(sum(log(age_users))) from users_2;
+
+
