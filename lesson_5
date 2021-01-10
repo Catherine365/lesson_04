@@ -1,7 +1,3 @@
--- Практическое задание по теме «Операторы, фильтрация, сортировка и ограничение»
-
--- 1
-
 create database practise;
 
 show databases;
@@ -29,12 +25,33 @@ update users set
 
 -- 2
 
-alter table users add column date_cat datetime;
-alter table users add column date_uat datetime;
+drop table users;
+
+create table users (
+	id int(10),
+	name varchar(50),
+	created_at varchar(255),
+	updated_at varchar(255)
+	);
+
+INSERT INTO users VALUES ('1','Jovany','11.06.2012 14:16','02.12.2013 3:23'),
+('2','Rupert','04.06.2010 6:59','01.11.2015 5:25'),
+('3','Dale','04.12.2015 12:39','09.08.2018 2:04'),
+('4','Melvina','08.12.2017 14:46','08.06.2013 9:13'),
+('5','Esmeralda','02.07.2019 6:36','02.01.2014 20:13');
+
+select * from users;
 
 update users set
-	date_cat = current_timestamp(),
-	date_uat = current_timestamp();
+	created_at = str_to_date(created_at, '%d.%m.%Y %k:%i'),
+	updated_at = str_to_date(updated_at, '%d.%m.%Y %k:%i');
+
+alter table users change created_at created_at datetime default current_timestamp;
+
+alter table users change updated_at updated_at datetime default current_timestamp on update current_timestamp;
+
+desc users;
+
 
 -- 3
 
@@ -53,6 +70,10 @@ INSERT INTO storehouses_products VALUES ('1','apple','2'),
 	('6','bread','4');
 
 select * from storehouses_products order by case when value_products = 0 then 16 else value_products end;
+
+-- Решение не хардкор, предложенное вами
+
+select * from storehouses_products order by value = 0, value;
 
 -- 4
 
@@ -95,23 +116,28 @@ select id from catalogs where id in(5, 1, 2) order by case when id = 2 then 5 el
 
 use practise;
 
+drop table users_2;
+
 create table users_2 (
 	id int(6),
-	age_users INT(10)
+	name varchar(255),
+	birthday_at date 
 	);
 
-insert into users_2 values ('1', '3'),
-('2', '6'),
-('3', '9');
+insert into users_2 values ('1', 'Hanna', '1990-10-05'),
+('2', 'Mary', '1989-06-01'),
+('3', 'Greg', '1998-11-02');
 
 select * from users_2;
 
-select AVG(age_users) as users_2Avg from users_2;
+select AVG(timestampdiff(year, birthday_at, now())) as age from users_2;
 
 
 ---- 2	
 	
---- Не разобралась с заданием)
+select * from users_2;
+
+select date_format(date(concat_ws('-', year(now()), month(birthday_at), day(birthday_at))), '%w') count(*) as total from users_2 group by day order by total desc;
 
 --- 3
 
